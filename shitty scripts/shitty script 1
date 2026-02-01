@@ -1,1 +1,31 @@
+ui=loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/usernamefrfra8/shitty-script-hub/refs/heads/main/ui%20lib"))()
+-- killaura
+-- teleport
+-- auto vote
+-- auto arena
+-- buy item from store
+-- become team (needs money)
+-- steal food
+-- bypass zone borders
+-- bypass shitty clientside anticheat localscript
+ui:Notify({
+    Title="Loading",
+    Body="Loading Script",
+    Duration=2
+})
+vars={
 
+}
+gui={
+    main=ui:Window({
+        Title="Shitty Script",
+        Description="Self Explanatory",
+        HideBind=Enum.KeyCode.KeypadZero
+    }),
+
+}
+ui:Notify({
+    Title="Loaded",
+    Body="Loaded Script",
+    Duration=1
+})
