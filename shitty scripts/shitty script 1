@@ -8,24 +8,85 @@ ui=loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/usernamefrfra
 -- steal food
 -- bypass zone borders
 -- bypass shitty clientside anticheat localscript
-ui:Notify({
+--[[ui:Notify({
     Title="Loading",
     Body="Loading Script",
     Duration=2
+})]]
+function fti(a,b)
+    firetouchinterest(a,b,0)
+    firetouchinterest(a,b,1)
+end
+function tp(x,y,z,wt)
+    local plr=game.Players.LocalPlayer
+    local chr=plr.Character or plr.CharacterAdded:Wait()
+    local pp=chr.PrimaryPart or chr.HumanoidRootPart
+    local prt
+    if not pp then
+        print("no pp")
+        return("no pp")
+    end
+    if plr.Team=="Doctor" then
+        prt=workspace:FindFirstChild("GUARDONLY",true)
+    else
+        prt=workspace:FindFirstChild("DOCONLY",true)
+    end
+    fti(pp,prt)
+    task.wait(wt)
+    pp.CFrame=CFrame.new(x,y,z)
+end
+tpspots={
+    ["Council"]=Vector3.new(-14, 43, 624),
+    ["Leader Tower"]=Vector3.new(0, 44, 433),
+    ["Axe"]=Vector3.new(61, 23, 429),
+    ["Net"]=Vector3.new(95, 23, 431),
+    ["Hammer"]=Vector3.new(123, 23, 430),
+    ["Sickle"]=Vector3.new(121, 23, 398),
+    ["Swords"]=Vector3.new(-100, 23, 422),
+    ["Weapons/Ranged"]=Vector3.new(-67, 23, 422),
+    ["Pub"]=Vector3.new(168, 23, 416),
+    ["Arena"]=Vector3.new(-229, 31, 327),
+    ["Popcorn"]=Vector3.new(-309, 31, 378),
+    ["Peanut"]=Vector3.new(-311, 31, 300),
+    ["Town Food"]=Vector3.new(68, 23, 314),
+    ["Backstage Jester"]=Vector3.new(57, 25, 224),
+    ["Limbs"]=Vector3.new(-18, 23, 221),
+    ["Doc Pond"]=Vector3.new(-39, 20, 286),
+    ["Mini Beach Pond"]=Vector3.new(205, 19, 287),
+    ["Tower 1"]=Vector3.new(-161, 82, 193),
+    ["Tower 2"]=Vector3.new(131, 101, 200),
+    ["Front Jail"]=Vector3.new(-195, 13, 239),
+    ["Shitty Rocks That Leaders Camp"]=Vector3.new(283, 81, 774),
+}
+tpwait=0.3
+main=ui:Window({
+    Title="Shitty Script",
+    Description="Self Explanatory",
+    HideBind=Enum.KeyCode.KeypadZero
 })
-vars={
-
-}
-gui={
-    main=ui:Window({
-        Title="Shitty Script",
-        Description="Self Explanatory",
-        HideBind=Enum.KeyCode.KeypadZero
-    }),
-
-}
-ui:Notify({
+teleports=main:Tab({
+    Name="Teleports"
+})
+tpwaitbutton=teleports:TextBox({
+    Name="Set Teleport Wait (0.3 recommended)",
+    Callback=function(a)
+        tpwait=a
+    end,
+    Default="0.3",
+    OnlyNumbers=true
+})
+-- should probably make this a dropdown lmao
+for i,v in tpspots do
+    print(i,v)
+    teleports:Button({
+        Name=i,
+        Callback=function()
+            tp(v.X,v.Y,v.Z,tpwait)
+        end
+    })
+end
+--[[ui:Notify({
     Title="Loaded",
     Body="Loaded Script",
     Duration=1
-})
+})]]
