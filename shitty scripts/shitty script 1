@@ -37,6 +37,58 @@ function tp(x,y,z,wt)
     task.wait()
     prt.CFrame=CFrame.new(400,600,400)
 end
+function getplrs()
+    local plrs={}
+    for i,v in game.Players:GetChildren() do
+        table.insert(plrs,v)
+    end
+    return plrs
+end
+function getchr(plr)
+    local chr = v.Character or v.CharacterAdded:Wait()
+    local hum=chr.Humanoid or nil
+    if not chr or not hum or not hum.Health>=0 then
+        return false
+    end
+    if chr and hum and hum.Health>=0 then
+        return chr
+    end
+end
+function getparts(parent)
+    local parts={}
+    for i,v in parent do
+        for i,v in v:GetChildren() do
+            if v:IsA("BasePart") then
+                table.insert(parts,v)
+            end
+        end
+    end
+    return parts
+end
+function checkdst(a,b,num)
+    local dst
+    dst=(a.Position-b.Position).Magnitude
+    if dst>num then
+        return false
+    end
+    return true
+end
+function attack(plr,dst)
+    local plr2=game.Players.LocalPlayer
+    local chr=getchr(plr2)
+    local tool=chr:FindFirstChildWhichIsA("Tool")
+    local toolpart=chr:FindFirstChildWhichIsA("TouchTransmitter",true).Parent
+    if not (chr or tool or toolpart) then
+        return
+    end
+    for i,v in getparts(getchr(plr)) do
+        if not checkdis(toolpart,v,dst) then
+            return
+        end
+        tool:Activate()
+        fti(toolpart,v)
+    end
+end
 towntps={
     ["Council"]=Vector3.new(-14, 43, 624),
     ["Leader Tower"]=Vector3.new(0, 44, 433),
@@ -205,6 +257,37 @@ for i,v in outsidetps do
         end
     })
 end
+killaura=main:Tab({
+    Name="Kill Aura"
+})
+killauraon=false
+stoploop=false
+killauradst=25
+while not stoploop and task.wait() do
+    if not killauraon then
+        return
+    end
+    for i,v in getplrs() do
+        attack(v,killauradst)
+    end
+end
+ui.OnDestruction:Connect(function()
+    killauraon=false
+    stoploop=true
+end)
+killauradistance=killaura:TextBox({
+    Name="set killaura max distance",
+    Callback=function(a)
+        killauradst=a
+    end,
+    Default="25",
+    OnlyNumbers=true
+})
+killauratoggle=killaura:Toggle({
+    Name="Kill Aura",
+    Callback=function(a)
+    killauraon=a
+})
 --[[ui:Notify({
     Title="Loaded",
     Body="Loaded Script",
