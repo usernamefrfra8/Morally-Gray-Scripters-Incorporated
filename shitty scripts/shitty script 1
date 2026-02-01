@@ -34,8 +34,10 @@ function tp(x,y,z,wt)
     fti(pp,prt)
     task.wait(wt)
     pp.CFrame=CFrame.new(x,y,z)
+    task.wait()
+    prt.CFrame=CFrame.new(400,600,400)
 end
-tpspots={
+towntps={
     ["Council"]=Vector3.new(-14, 43, 624),
     ["Leader Tower"]=Vector3.new(0, 44, 433),
     ["Axe"]=Vector3.new(61, 23, 429),
@@ -44,6 +46,8 @@ tpspots={
     ["Sickle"]=Vector3.new(121, 23, 398),
     ["Swords"]=Vector3.new(-100, 23, 422),
     ["Weapons/Ranged"]=Vector3.new(-67, 23, 422),
+    ["Jail1"]=Vector3.new(-238, 13, 240),
+    ["Jail2"]=Vector3.new(-249, 31, 268),
     ["Pub"]=Vector3.new(168, 23, 416),
     ["Arena"]=Vector3.new(-229, 31, 327),
     ["Popcorn"]=Vector3.new(-309, 31, 378),
@@ -57,6 +61,29 @@ tpspots={
     ["Tower 2"]=Vector3.new(131, 101, 200),
     ["Front Jail"]=Vector3.new(-195, 13, 239),
     ["Shitty Rocks That Leaders Camp"]=Vector3.new(283, 81, 774),
+}
+outsidetps={
+    ["Peasant Axe"]=Vector3.new(-248, 4, 98),
+    ["Peasant Net"]=Vector3.new(-317, 3, -11),
+    ["Karts"]=Vector3.new(-129, 3, -135),
+    ["Tree Lord"]=Vector3.new(228, 63, -284),
+}
+tooltps={
+    ["Peasant Axe"]=Vector3.new(-248, 4, 98),
+    ["Peasant Net"]=Vector3.new(-317, 3, -11),
+    ["Axe"]=Vector3.new(61, 23, 429),
+    ["Net"]=Vector3.new(95, 23, 431),
+    ["Hammer"]=Vector3.new(123, 23, 430),
+    ["Sickle"]=Vector3.new(121, 23, 398),
+    ["Swords"]=Vector3.new(-100, 23, 422),
+    ["Weapons/Ranged"]=Vector3.new(-67, 23, 422),
+    ["Popcorn"]=Vector3.new(-309, 31, 378),
+    ["Peanut"]=Vector3.new(-311, 31, 300),
+    ["Town Food"]=Vector3.new(68, 23, 314),
+    ["Limbs"]=Vector3.new(-18, 23, 221),
+}
+othertps={
+    ["Heaven"]=Vector3.new(-192, 447, 55),
 }
 tpwait=0.3
 main=ui:Window({
@@ -76,12 +103,105 @@ tpwaitbutton=teleports:TextBox({
     OnlyNumbers=true
 })
 -- should probably make this a dropdown lmao
-for i,v in tpspots do
+--[[for i,v in tpspots do
     print(i,v)
     teleports:Button({
         Name=i,
         Callback=function()
             tp(v.X,v.Y,v.Z,tpwait)
+        end
+    })
+end]]
+towntpnames={"lmaoshittyplaceholder"}
+for i,v in towntps do
+    table.insert(towntpnames,i)    
+end
+towntpsfr=teleports:Dropdown({
+    Name="Town Teleports",
+    Items=towntpnames,
+    Callback=function(v)
+        local pos=towntps[v]
+        tp(pos.X,pos.Y,pos.Z,tpwait)
+    end,
+    AlwaysOpen=true,
+    FLAG="towntpflag"
+
+})
+ui.flags.towntpflag.OnChange:Connect(function()
+    task.wait()
+    towntpsfr:SelectItem("lmaoshittyplaceholder")
+end)
+tooltpnames={"lmaoshittyplaceholder"}
+for i,v in tooltps do
+    table.insert(tooltpnames,i)    
+end
+tooltpsfr=teleports:Dropdown({
+    Name="Tool Teleports",
+    Items=tooltpnames,
+    Callback=function(v)
+        local pos=tooltps[v]
+        tp(pos.X,pos.Y,pos.Z,tpwait)
+    end,
+    AlwaysOpen=true,
+    FLAG="tooltpflag"
+
+})
+ui.flags.tooltpflag.OnChange:Connect(function()
+    task.wait()
+    tooltpsfr:SelectItem("lmaoshittyplaceholder")
+end)
+outsidetpnames={"lmaoshittyplaceholder"}
+for i,v in outsidetps do
+    table.insert(outsidetpnames,i)    
+end
+outsidetpsfr=teleports:Dropdown({
+    Name="Outside Teleports",
+    Items=outsidetpnames,
+    Callback=function(v)
+        local pos=outsidetps[v]
+        tp(pos.X,pos.Y,pos.Z,tpwait)
+    end,
+    AlwaysOpen=true,
+    FLAG="outsidetpflag"
+
+})
+ui.flags.outsidetpflag.OnChange:Connect(function()
+    task.wait()
+    outsidetpsfr:SelectItem("lmaoshittyplaceholder")
+end)
+teleportbuttons=main:Tab({
+    Name="TpButtons"
+})
+tpwait2=0.3
+tpwaitbutton2=teleportbuttons:TextBox({
+    Name="Set Teleport Wait (0.3 recommended)",
+    Callback=function(a)
+        tpwait2=a
+    end,
+    Default="0.3",
+    OnlyNumbers=true
+})
+for i,v in tooltps do
+    teleportbuttons:Button({
+        Name=i,
+        Callback=function()
+            tp(v.X,v.Y,v.Z,tpwait2)
+        end
+    })
+end
+for i,v in towntps do
+    teleportbuttons:Button({
+        Name=i,
+        Callback=function()
+            tp(v.X,v.Y,v.Z,tpwait2)
+        end
+    })
+end
+for i,v in outsidetps do
+    teleportbuttons:Button({
+        Name=i,
+        Callback=function()
+            tp(v.X,v.Y,v.Z,tpwait2)
         end
     })
 end
